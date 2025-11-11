@@ -1,0 +1,33 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      - '--tag'
+      - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'
+      - '.'
+      - '--progress=plain'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'delivery-time-prediction'
+      - '--image'
+      - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'
+      - '--region'
+      - 'southamerica-east1'
+      - '--platform'
+      - 'managed'
+      - '--port'
+      - '8501'
+
+images:
+  - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'

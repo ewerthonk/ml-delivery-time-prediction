@@ -1,0 +1,177 @@
+[
+  {
+    "nome_do_campo_antes_limpeza": "MARCA DA LOJA",
+    "nome_do_campo_apos_limpeza": "marca_da_loja",
+    "tipo": "category",
+    "descrição": "Identificador codificado da marca da loja (anonimizado por privacidade)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "NOME DA LOJA",
+    "nome_do_campo_apos_limpeza": "nome_da_loja",
+    "tipo": "category",
+    "descrição": "Identificador codificado do nome da loja (anonimizado por privacidade)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "ID DA LOJA",
+    "nome_do_campo_apos_limpeza": "id_da_loja",
+    "tipo": "int32",
+    "descrição": "Identificador único da loja/restaurante",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "ID COMPLETO DO PEDIDO",
+    "nome_do_campo_apos_limpeza": "id_completo_do_pedido",
+    "tipo": "string",
+    "descrição": "ID completo do pedido (formato UUID)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "ID CURTO DO PEDIDO",
+    "nome_do_campo_apos_limpeza": "id_curto_do_pedido",
+    "tipo": "int16",
+    "descrição": "ID curto do pedido por loja/restaurante para referência facilitada",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "DATA E HORA DO PEDIDO",
+    "nome_do_campo_apos_limpeza": "data_e_hora_do_pedido",
+    "tipo": "datetime64[ns]",
+    "descrição": "Data e hora em que o pedido foi realizado",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TURNO",
+    "nome_do_campo_apos_limpeza": "turno",
+    "tipo": "category",
+    "descrição": "Turno/período do dia (ex: almoço, jantar) em que o pedido foi realizado",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "SERVIÇO LOGÍSTICO",
+    "nome_do_campo_apos_limpeza": "servico_logistico",
+    "tipo": "category",
+    "descrição": "Tipo de serviço logístico utilizado para entrega (ex: ENTREGA_MAIS_FLEX)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "AGRUPAMENTO DE ROTA",
+    "nome_do_campo_apos_limpeza": "agrupamento_de_rota",
+    "tipo": "category",
+    "descrição": "Tipo de agrupamento de rota (entregas individuais ou em lote)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "PRIORIDADE DO PEDIDO",
+    "nome_do_campo_apos_limpeza": "prioridade_do_pedido",
+    "tipo": "category",
+    "descrição": "Nível de prioridade do pedido (ex: padrão, alta prioridade)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "STATUS FINAL DO PEDIDO",
+    "nome_do_campo_apos_limpeza": "status_final_do_pedido",
+    "tipo": "category",
+    "descrição": "Status final do pedido (entregue, cancelado, etc.). Usar filtro != 'CANCELADO'.",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DE PREPARO DO PEDIDO (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_de_preparo_do_pedido_min",
+    "tipo": "float32",
+    "descrição": "Tempo de preparo do pedido no restaurante (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DE ALOCAÇÃO DO ENTREGADOR (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_de_alocacao_do_entregador_min",
+    "tipo": "float32",
+    "descrição": "Tempo necessário para alocar um entregador (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DE ACIONAMENTO DO BOTÃO PRONTO (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_de_acionamento_do_botao_pronto_min",
+    "tipo": "float32",
+    "descrição": "Tempo para acionar o botão 'pronto' após conclusão do pedido (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DO ENTREGADOR À CAMINHO DA LOJA (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_do_entregador_a_caminho_da_loja_min",
+    "tipo": "float32",
+    "descrição": "Tempo do entregador para se deslocar até a loja (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DO ENTREGADOR ESPERANDO NA LOJA (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_do_entregador_esperando_na_loja_min",
+    "tipo": "float32",
+    "descrição": "Tempo de espera do entregador na loja (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DO ENTREGADOR À CAMINHO DO CLIENTE (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_do_entregador_a_caminho_do_cliente_min",
+    "tipo": "float32",
+    "descrição": "Tempo do entregador para se deslocar da loja até o cliente (minutos) - VARIÁVEL ALVO para regressão de ML",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DO ENTREGADOR ESPERANDO NO CLIENTE (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_do_entregador_esperando_no_cliente_min",
+    "tipo": "float32",
+    "descrição": "Tempo de espera do entregador no local do cliente (minutos)",
+    "disponivel_na_hora_do_pedido": false
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO PROMETIDO DE ENTREGA (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_prometido_de_entrega_min",
+    "tipo": "float32",
+    "descrição": "Tempo de entrega prometido ao cliente (minutos)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DA ENTREGA REALIZADA (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_da_entrega_realizada_min",
+    "tipo": "float32",
+    "descrição": "Tempo total real de entrega desde a realização do pedido até conclusão (minutos). É o target.",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TEMPO DE ATRASO EM RELAÇÃO AO TEMPO PROMETIDO DE ENTREGA (MIN)",
+    "nome_do_campo_apos_limpeza": "tempo_de_atraso_em_relacao_ao_tempo_prometido_de_entrega_min",
+    "tipo": "float32",
+    "descrição": "Atraso em relação ao tempo de entrega prometido (minutos, negativo se antecipado)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "DISTÂNCIA PERCORRIDA ATÉ O CLIENTE (KM)",
+    "nome_do_campo_apos_limpeza": "distancia_percorrida_ate_o_cliente_km",
+    "tipo": "float32",
+    "descrição": "Distância percorrida até chegar ao cliente (quilômetros)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "TAXA DE ENTREGA PAGA PELO CLIENTE (R$)",
+    "nome_do_campo_apos_limpeza": "taxa_de_entrega_paga_pelo_cliente_reais",
+    "tipo": "float32",
+    "descrição": "Taxa de entrega paga pelo cliente (R$)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "FRETE COBRADO DO RESTAURANTE (APENAS SOB DEMANDA)",
+    "nome_do_campo_apos_limpeza": "frete_cobrado_do_restaurante_apenas_sob_demanda",
+    "tipo": "float32",
+    "descrição": "Frete cobrado do restaurante apenas sob demanda (R$)",
+    "disponivel_na_hora_do_pedido": true
+  },
+  {
+    "nome_do_campo_antes_limpeza": "VALOR TOTAL DOS ITENS DO PEDIDO (R$)",
+    "nome_do_campo_apos_limpeza": "valor_total_dos_itens_do_pedido_reais",
+    "tipo": "float32",
+    "descrição": "Valor total dos itens do pedido excluindo taxa de entrega (R$)",
+    "disponivel_na_hora_do_pedido": true
+  }
+]
