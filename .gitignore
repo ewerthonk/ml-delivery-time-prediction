@@ -25,6 +25,9 @@ MANIFEST
 # MacOS
 .DS_Store
 
+# Data files
+data/raw/*.xlsx
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
