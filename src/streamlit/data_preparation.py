@@ -21,11 +21,11 @@ def main():
 
             ### Execução
             
-            Uilizar `OpenWeatherAPI` e transformações `pandas`.
+            Uilizar `OpenWeatherAPI` e transformações `pandas`. A operação com OpenWeatherAPI ficou inviável devido ao custo da API e a distribuição geográfica das lojas (50 R$ por cidade para obter dados históricos) e foi desconsiderada.
 
             ### Considerações
 
-            TODO
+            A feature de `Número de pedidos na loja na última hora` foi adicionada, mas teve pouco impacto em termos de correlação e explicabilidade da variação do target.
 
             ## Data Preprocessing
 
@@ -50,7 +50,7 @@ def main():
 
             ### Considerações
 
-            Dados prontos para modelagem de Machine Learning
+            Dados prontos para modelagem de Machine Learning.
             """
         ),
         unsafe_allow_html=True,

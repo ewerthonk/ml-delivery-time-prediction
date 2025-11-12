@@ -31,6 +31,8 @@ def main():
             - **`colsample_bytree`**: 0.05 a 1.0 - Fração de features usadas por árvore
             - **`min_child_weight`**: 1 a 20 - Peso mínimo necessário em um nó filho
             - **`gamma`**: 0 a 5.0 - Redução mínima de perda para criar nova partição
+            - **`alpha`**: 0 a 10.0 - Regularização L1
+            - **`lambda`**: 1 a 10.0 - Regularização L2
 
             ### Conclusões
 
@@ -65,7 +67,7 @@ def main():
             f"""
             ### Baseline
 
-            O Dummy Regressor (que prediz o valor da média dos dados de treino - aproximadamente 35,4 minutos) apresentou MAE de aproximadamente 12 minutos em treino e validação, aumentando para 14.41 minutos no teste. 
+            O Dummy Regressor (que prediz o valor da média dos dados de treino - aproximadamente 35,4 minutos) apresentou MAE de aproximadamente 13 minutos em treino, validação e teste.
             Este modelo serve como referência mínima de desempenho, mostrando que qualquer modelo preditivo deve superar estes valores para ser considerado útil.
             """
         ),
@@ -90,7 +92,7 @@ def main():
             f"""
             ### XGBoost Inicial
 
-            O modelo XGBoost inicial (com n_estimators = 100) apresentou MAE de aproximadamente 11 minutos em treino, aumentando para 13.5 minutos no teste. 
+            O modelo XGBoost inicial (com n_estimators = 100) apresentou MAE de aproximadamente 5,62 minutos em treino, aumentando para 9,83 minutos no teste. 
             Este modelo serve como uma melhoria em relação ao Dummy Regressor, mas com pouco ganho de desempenho em relação à média (modelo anterior).
             """
         ),
@@ -101,7 +103,7 @@ def main():
     st.markdown(
         body=dedent(
             f"""
-            Das visualizações, observa-se um claro **overfit**, caracterizado pela diferença entre as curvas de aprendizado e os parâmetros. Além disso, nota-se que um aumento do número de observações ainda pode ser benéfico para o modelo.
+            Das visualizações, observa-se um comportamento típico de **overfit**, caracterizado pela diferença entre as curvas de aprendizado e os parâmetros. Além disso, nota-se que um aumento do número de observações ainda pode ser benéfico para o modelo.
 
             ---
             """
@@ -118,17 +120,19 @@ def main():
 
             ```json
             {{
-                "n_estimators": 2000,
-                "learning_rate": 0.0055127883672954235,
-                "max_depth": 5,
-                "subsample": 0.20501390052078072,
-                "colsample_bytree": 0.7265258604534922,
-                "min_child_weight": 1,
-                "gamma": 0.5532158798897284
+                "n_estimators": 1481,
+                "learning_rate": 0.007,
+                "max_depth": 8,
+                "subsample": 0.83,
+                "colsample_bytree": 0.68,
+                "min_child_weight": 13,
+                "gamma": 1.086,
+                "alpha": 2.549,
+                "lambda": 2.457,
             }}
             ```
 
-            O modelo XGBoost otimizado apresentou MAE de aproximadamente 10 minutos em treino, aumentando para 13 minutos no teste.
+            O modelo XGBoost otimizado apresentou MAE de aproximadamente 6,7 minutos em treino, aumentando para 9,4 minutos no teste.
             """
         ),
         unsafe_allow_html=True,
@@ -148,12 +152,11 @@ def main():
         body=dedent(
             f"""
             ## Considerações Finais
-            
-            1. Não há ganhos significativos da abordagem de machine learning em relação ao baseline com a média (35,4 minutos) com erro médio de 14,4 minutos para 13 minutos. 
-            2. Há indícios de que as features do dataset não representem o problema real de forma satisfatória, especialmente considerando os fatores levantados durante a fase de Business Understanding (meteorológicos, demanda da cozinha, disponibilidade de entregadores e pedidos com alimentos quentes/frios) e as considerações da fase de Data Understanding.
-            3. O ganho massivo de desempenho com machine learning ocorre em até 6000 observações, fortalecendo a consideração #1. Apesar disso, o modelo não atingiu um plateau em termos de aprendizado.
-            4. Modelar o problema de forma isolada para cada restaurante pode trazer ganhos e justificar a implementação do modelo, especialmente considerando a curva ABC de restaurantes por volume de pedidos e criticidade de demanda.
-            5. Há indícios de que o comportamento da distribuição do tempo de entrega varia ao longo do tempo, considerando o formato do split de dados e a diferença da média dos dados de treino (35,4 minutos) e a média geral (37 minutos).
+
+            1. O ganho de desempenho da abordagem de machine learning em relação ao baseline foi a redução do erro médio (MAE) de 12,81 minutos para 9,49 minutos. Considerando o tempo médio de entrega de aproximadamente 37 minutos, a viabilidade da implementação depende da estratégia do negócio.
+            2. Há indícios de que as features do dataset podem não representar o problema real de forma satisfatória, especialmente considerando os fatores levantados durante a fase de Business Understanding (meteorológicos, demanda da cozinha, disponibilidade de entregadores e pedidos com alimentos quentes/frios) e as considerações da fase de Data Understanding (correlações baixas).
+            3. O ganho massivo de desempenho com machine learning ocorre em até 6000 observações, indicando que um maior número de observações pode gerar melhores resultados. Apesar disso, o modelo não atingiu um plateau em termos de aprendizado.
+            4. Modelar o problema de forma isolada para cada restaurante pode trazer ganhos e justificar a implementação do modelo, especialmente considerando a curva ABC de restaurantes por volume de pedidos e criticidade de demanda. Essa abordagem, aliada à adição das features citadas no tópico 2, podem justificar a evolução de esforços no projeto.
             """
         ),
         unsafe_allow_html=True,

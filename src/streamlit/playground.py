@@ -78,21 +78,21 @@ def main():
     with col1:
         st.metric(
             label="MAE Treino (CV)",
-            value=f"7.94 min",
-            delta=f"± 0.27",
+            value=f"6,70 min",
+            delta=f"± 0.08",
             delta_color="off",
         )
     with col2:
         st.metric(
             label="MAE Validação (CV)",
-            value=f"10.01 min",
-            delta=f"± 0.94",
+            value=f"9,37 min",
+            delta=f"± 0.07",
             delta_color="off",
         )
     with col3:
         st.metric(
             label="MAE Teste",
-            value=f"13.09 min",
+            value=f"9,49 min",
             delta=None,
         )
     

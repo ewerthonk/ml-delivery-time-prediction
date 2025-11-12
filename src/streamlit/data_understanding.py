@@ -69,12 +69,12 @@ def main():
 
             **Visualização de Árvore de Decisão**
 
-            Adiciona às conclusões anteriores. Com destaque para a distância até o cliente, loja e features temporais
+            Adiciona às conclusões anteriores. Com destaque para a distância até o cliente, loja e features temporais.
             
             #### Gerais
 
             1. Há baixa correlação e poder preditivo geral das features o target.
-            2. Vale a pena gerar novas features baseadas nas regras de negócio.
+            2. Vale a pena gerar novas features baseadas nas regras de negócio. Contudo, a única variável disponível para engenharia de feature é a de demanda nos últimos 60 minutos.
             3. As features temporais não apresentaram tanta relevância com o target como esperado. É provável que uma única feature que represente a sazonalidade intradia - que também captura o efeito do trânsito - seja suficiente.
             4. A feature referente à loja captura parte do efeito de tamanho da cidade e de seu próprio funcionamento operacional.
             """
