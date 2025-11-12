@@ -13,9 +13,8 @@ def main():
             f"""
             ## Deployment
 
-            O pipeline com modelo foi salvo usando a biblioteca `joblib` e está exposto em Streamlit.
-            O repositório do código-fonte é: [GitHub](https://github.com/ewerthon/delivery-time-prediction)
-            A aplicação foi containerizada e implementada em Google Cloud Run e está exposta ao público.
+            O pipeline com modelo foi salvo usando a biblioteca `joblib` e está exposto em Streamlit. 
+            O repositório do código-fonte é: [GitHub](https://github.com/ewerthonk/ml-delivery-time-prediction). A aplicação foi containerizada e implementada em Google Cloud Run e está exposta ao público.
             
             O diagrama de arquitetura é:
             """

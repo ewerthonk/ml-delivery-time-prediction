@@ -60,18 +60,7 @@ def update_datetime_features(df):
 
 
 def main():
-    st.markdown(
-        body=dedent(
-            """
-            ## Predição de Tempo de Entrega
-
-            ### Contexto
-
-            O modelo obteve um erro médio de aproximadamente 13 minutos nos dados de teste. As métricas são:
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+    st.markdown(body="""## Predição de Tempo de Entrega""")
 
     col1, col2, col3 = st.columns(3)
 
@@ -95,53 +84,62 @@ def main():
             value=f"9,49 min",
             delta=None,
         )
-    
-    # Create features info dataframe
-    features_info = pd.DataFrame({
-        "Feature": [
-            "Marca da loja",
-            "Nome da loja",
-            "Data e hora do pedido",
-            "Turno",
-            "Serviço logístico",
-            "Prioridade do pedido",
-            "Distância percorrida (km)",
-            "Taxa de entrega (R$)",
-            "Valor total dos itens (R$)",
-            "Dia da semana",
-            "Dia do mês",
-            "Hora do pedido",
-            "Minuto do pedido",
-            "Minutos desde meia-noite",
-            "Pedidos na última hora"
-        ],
-        "Faixa/Valores": [
-            "0-1 (anonimizada)",
-            "0-11 (anonimizada)",
-            "Datetime",
-            "MANHA, ALMOCO, TARDE, JANTAR, CEIA, MADRUGADA",
-            "ENTREGA_MAIS_FLEX, FULL_SERVICE, SOB_DEMANDA_ON, SOB_DEMANDA_OFF",
-            "PADRAO, RAPIDA",
-            "0.00 - 32.47 km",
-            "R$ 4.99 - 29.99",
-            "R$ 0 - 975.30",
-            "0-6",
-            "1-31",
-            "8-22",
-            "0-59",
-            "520-1378",
-            "0-60 pedidos"
-        ]
-    })
-    
-    st.markdown("**Variáveis utilizadas pelo modelo:**")
-    st.dataframe(features_info, hide_index=True, width="stretch", height=563)
+
+    # Expandable section for data dictionary
+    with st.expander("📊 Dicionário de Dados e Contexto", expanded=False):
+        # Create features info dataframe
+        features_info = pd.DataFrame({
+            "Feature": [
+                "Marca da loja",
+                "Nome da loja",
+                "Data e hora do pedido",
+                "Turno",
+                "Serviço logístico",
+                "Prioridade do pedido",
+                "Distância percorrida (km)",
+                "Taxa de entrega (R$)",
+                "Valor total dos itens (R$)",
+                "Dia da semana",
+                "Dia do mês",
+                "Hora do pedido",
+                "Minuto do pedido",
+                "Minutos desde meia-noite",
+                "Pedidos na última hora"
+            ],
+            "Faixa/Valores": [
+                "0-1 (anonimizada)",
+                "0-11 (anonimizada)",
+                "Datetime",
+                "MANHA, ALMOCO, TARDE, JANTAR, CEIA, MADRUGADA",
+                "ENTREGA_MAIS_FLEX, FULL_SERVICE, SOB_DEMANDA_ON, SOB_DEMANDA_OFF",
+                "PADRAO, RAPIDA",
+                "0.00 - 32.47 km",
+                "R$ 4.99 - 29.99",
+                "R$ 0 - 975.30",
+                "0-6",
+                "1-31",
+                "8-22",
+                "0-59",
+                "520-1378",
+                "0-60 pedidos"
+            ]
+        })
+
+        st.markdown(
+            body=dedent(
+                """
+                ### Contexto
+
+                O modelo obteve um erro médio de aproximadamente 9,49 minutos nos dados de teste. Variáveis utilizadas pelo modelo:
+                """
+            ),
+            unsafe_allow_html=True,
+        )
+        st.dataframe(features_info, hide_index=True, width="stretch", height=563)
     
     st.markdown(
         body=dedent(
             """
-            ---
-            
             ### Playground
 
             Utilize a amostra abaixo para obter a predição de tempo de entrega:
@@ -324,7 +322,7 @@ def main():
                 "n_estimators",
                 min_value=100,
                 max_value=2000,
-                value=2000,
+                value=1481,
                 step=100,
                 help="Número de árvores no ensemble"
             )
@@ -333,7 +331,7 @@ def main():
                 "learning_rate",
                 min_value=0.001,
                 max_value=0.1,
-                value=0.0055,
+                value=0.0075,
                 help="Taxa de aprendizado"
             )
             
@@ -341,7 +339,7 @@ def main():
                 "max_depth",
                 min_value=1,
                 max_value=10,
-                value=5,
+                value=8,
                 step=1,
                 help="Profundidade máxima de cada árvore"
             )
@@ -351,7 +349,7 @@ def main():
                 "subsample",
                 min_value=0.05,
                 max_value=1.0,
-                value=0.205,
+                value=0.83,
                 step=0.05,
                 help="Fração de amostras usadas por árvore"
             )
@@ -360,9 +358,18 @@ def main():
                 "colsample_bytree",
                 min_value=0.05,
                 max_value=1.0,
-                value=0.727,
+                value=0.68,
                 step=0.05,
                 help="Fração de features usadas por árvore"
+            )
+
+            alpha = st.slider(
+                "alpha",
+                min_value=0.0,
+                max_value=10.0,
+                value=2.55,
+                step=0.1,
+                help="Termo de regularização L1 nos pesos"
             )
         
         with col3:
@@ -370,7 +377,7 @@ def main():
                 "min_child_weight",
                 min_value=1,
                 max_value=20,
-                value=1,
+                value=13,
                 step=1,
                 help="Peso mínimo necessário em um nó filho"
             )
@@ -379,14 +386,23 @@ def main():
                 "gamma",
                 min_value=0.0,
                 max_value=5.0,
-                value=0.553,
+                value=1.09,
                 step=0.1,
                 help="Redução mínima de perda para criar nova partição"
+            )
+            
+            reg_lambda = st.slider(
+                "lambda",
+                min_value=1.0,
+                max_value=10.0,
+                value=2.46,
+                step=0.1,
+                help="Termo de regularização L2 nos pesos"
             )
         
         if st.button("Treinar Modelo Personalizado", use_container_width=True):
             st.session_state._just_trained = True
-            with st.spinner("Treinando modelo com validação cruzada..."):
+            with st.spinner("Treinando modelo e gerando validação cruzada..."):
                 # Create custom XGBoost model with user parameters
                 custom_xgb = XGBRegressor(
                     n_estimators=n_estimators,
@@ -396,6 +412,8 @@ def main():
                     colsample_bytree=colsample_bytree,
                     min_child_weight=min_child_weight,
                     gamma=gamma,
+                    alpha=alpha,
+                    reg_lambda=reg_lambda,
                     objective="reg:squarederror",
                     random_state=42,
                     verbosity=0,
