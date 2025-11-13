@@ -4,7 +4,6 @@ from textwrap import dedent
 import pandas as pd
 import numpy as np
 import joblib
-from pathlib import Path
 from sklearn.model_selection import cross_validate, KFold
 from sklearn.metrics import mean_absolute_error
 from sklearn.pipeline import Pipeline
@@ -67,21 +66,21 @@ def main():
     with col1:
         st.metric(
             label="MAE Treino (CV)",
-            value=f"6,70 min",
-            delta=f"± 0.08",
+            value=f"7,4 min",
+            delta=f"± 0,1",
             delta_color="off",
         )
     with col2:
         st.metric(
             label="MAE Validação (CV)",
-            value=f"9,37 min",
-            delta=f"± 0.07",
+            value=f"9,4 min",
+            delta=f"± 0,1",
             delta_color="off",
         )
     with col3:
         st.metric(
             label="MAE Teste",
-            value=f"9,49 min",
+            value=f"9,5 min",
             delta=None,
         )
 
@@ -130,7 +129,7 @@ def main():
                 """
                 ### Contexto
 
-                O modelo obteve um erro médio de aproximadamente 9,49 minutos nos dados de teste. Variáveis utilizadas pelo modelo:
+                O modelo obteve um erro médio de aproximadamente 9,5 minutos nos dados de teste. Variáveis utilizadas pelo modelo:
                 """
             ),
             unsafe_allow_html=True,
@@ -322,7 +321,7 @@ def main():
                 "n_estimators",
                 min_value=100,
                 max_value=2000,
-                value=1481,
+                value=785,
                 step=100,
                 help="Número de árvores no ensemble"
             )
@@ -331,7 +330,8 @@ def main():
                 "learning_rate",
                 min_value=0.001,
                 max_value=0.1,
-                value=0.0075,
+                value=0.012,
+                step=0.001,
                 help="Taxa de aprendizado"
             )
             
@@ -349,8 +349,8 @@ def main():
                 "subsample",
                 min_value=0.05,
                 max_value=1.0,
-                value=0.83,
-                step=0.05,
+                value=0.82,
+                step=0.01,
                 help="Fração de amostras usadas por árvore"
             )
             
@@ -358,8 +358,8 @@ def main():
                 "colsample_bytree",
                 min_value=0.05,
                 max_value=1.0,
-                value=0.68,
-                step=0.05,
+                value=0.76,
+                step=0.01,
                 help="Fração de features usadas por árvore"
             )
 
@@ -367,8 +367,8 @@ def main():
                 "alpha",
                 min_value=0.0,
                 max_value=10.0,
-                value=2.55,
-                step=0.1,
+                value=2.38,
+                step=0.01,
                 help="Termo de regularização L1 nos pesos"
             )
         
@@ -377,7 +377,7 @@ def main():
                 "min_child_weight",
                 min_value=1,
                 max_value=20,
-                value=13,
+                value=18,
                 step=1,
                 help="Peso mínimo necessário em um nó filho"
             )
@@ -386,8 +386,8 @@ def main():
                 "gamma",
                 min_value=0.0,
                 max_value=5.0,
-                value=1.09,
-                step=0.1,
+                value=4.42,
+                step=0.01,
                 help="Redução mínima de perda para criar nova partição"
             )
             
@@ -395,8 +395,8 @@ def main():
                 "lambda",
                 min_value=1.0,
                 max_value=10.0,
-                value=2.46,
-                step=0.1,
+                value=9.82,
+                step=0.01,
                 help="Termo de regularização L2 nos pesos"
             )
         

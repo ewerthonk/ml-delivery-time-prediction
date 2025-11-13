@@ -46,7 +46,7 @@ def main():
                 - `marca_da_loja` e `nome_da_loja`: Count Frequency Encoder, 
                 transformando categorias em suas frequências absolutas no dataset.
                 - `servico_logistico`: One-Hot Encoder.
-            - Split realizado em 80/20 sem embaralhamento para Treino/Test.
+            - Split: 80/20 para Treino/Teste e Validação Cruzada com 3 folds.
 
             ### Considerações
 

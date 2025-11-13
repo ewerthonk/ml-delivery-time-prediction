@@ -67,8 +67,8 @@ def main():
             f"""
             ### Baseline
 
-            O Dummy Regressor (que prediz o valor da média dos dados de treino - aproximadamente 35,4 minutos) apresentou MAE de aproximadamente 13 minutos em treino, validação e teste.
-            Este modelo serve como referência mínima de desempenho, mostrando que qualquer modelo preditivo deve superar estes valores para ser considerado útil.
+            O Dummy Regressor (que prediz o valor da média dos dados de treino - aproximadamente 37 minutos) apresentou MAE de aproximadamente 12,9 minutos em treino, validação e teste.
+            Este modelo serve como referência mínima de desempenho.
             """
         ),
         unsafe_allow_html=True,
@@ -78,7 +78,7 @@ def main():
     st.markdown(
         body=dedent(
             f"""
-            Das visualizações, observa-se o R2 de treino igual a 0 e o R2 de teste é negativo, indicando que o modelo não explica a variabilidade dos dados. Não há observações relevantes para o gráfico de curva de aprendizado, já que a média é utilizada.
+            Das visualizações, observa-se o R2 de treino e teste igual a 0, indicando que o modelo não explica a variabilidade dos dados. Não há observações relevantes para o gráfico de curva de aprendizado, já que a média é utilizada.
             
             ---
             """
@@ -92,8 +92,7 @@ def main():
             f"""
             ### XGBoost Inicial
 
-            O modelo XGBoost inicial (com n_estimators = 100) apresentou MAE de aproximadamente 5,62 minutos em treino, aumentando para 9,83 minutos no teste. 
-            Este modelo serve como uma melhoria em relação ao Dummy Regressor, mas com pouco ganho de desempenho em relação à média (modelo anterior).
+            O modelo XGBoost inicial (com n_estimators = 100) apresentou MAE de aproximadamente 5,7 minutos em treino, aumentando para 9,8 minutos no teste. 
             """
         ),
         unsafe_allow_html=True,
@@ -120,19 +119,19 @@ def main():
 
             ```json
             {{
-                "n_estimators": 1481,
-                "learning_rate": 0.007,
+                "n_estimators": 785,
+                "learning_rate": 0.012,
                 "max_depth": 8,
-                "subsample": 0.83,
-                "colsample_bytree": 0.68,
-                "min_child_weight": 13,
-                "gamma": 1.086,
-                "alpha": 2.549,
-                "lambda": 2.457,
+                "subsample": 0.82,
+                "colsample_bytree": 0.76,
+                "min_child_weight": 18,
+                "gamma": 4.42,
+                "alpha": 2.38,
+                "lambda": 9.82,
             }}
             ```
 
-            O modelo XGBoost otimizado apresentou MAE de aproximadamente 6,7 minutos em treino, aumentando para 9,4 minutos no teste.
+            O modelo XGBoost otimizado apresentou MAE de aproximadamente 7,4 minutos em treino, aumentando para 9,5 minutos no teste.
             """
         ),
         unsafe_allow_html=True,
@@ -153,7 +152,7 @@ def main():
             f"""
             ## Considerações Finais
 
-            1. O ganho de desempenho da abordagem de machine learning em relação ao baseline foi a redução do erro médio (MAE) de 12,81 minutos para 9,49 minutos. Considerando o tempo médio de entrega de aproximadamente 37 minutos, a viabilidade da implementação depende da estratégia do negócio.
+            1. O ganho de desempenho da abordagem de machine learning em relação ao baseline foi a redução do erro médio (MAE) de 12,8 minutos para 9,5 minutos (redução de 25,8%). Considerando o tempo médio de entrega de aproximadamente 37 minutos, a viabilidade da implementação depende da estratégia do negócio.
             2. Há indícios de que as features do dataset podem não representar o problema real de forma satisfatória, especialmente considerando os fatores levantados durante a fase de Business Understanding (meteorológicos, demanda da cozinha, disponibilidade de entregadores e pedidos com alimentos quentes/frios) e as considerações da fase de Data Understanding (correlações baixas).
             3. O ganho massivo de desempenho com machine learning ocorre em até 6000 observações, indicando que um maior número de observações pode gerar melhores resultados. Apesar disso, o modelo não atingiu um plateau em termos de aprendizado.
             4. Modelar o problema de forma isolada para cada restaurante pode trazer ganhos e justificar a implementação do modelo, especialmente considerando a curva ABC de restaurantes por volume de pedidos e criticidade de demanda. Essa abordagem, aliada à adição das features citadas no tópico 2, podem justificar a evolução de esforços no projeto.

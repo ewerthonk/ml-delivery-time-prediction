@@ -18,6 +18,7 @@ def main():
             #### Contexto
 
             **Objetivo**: descobrir se os dados se comportam como deveriam se comportar em termos de nomes das colunas, tamanho do dataset, tipos de dados, valores ausentes e duplicados.
+            
             **Método**: utilizar `ydata_profiling`.
 
             #### Execução
@@ -27,8 +28,8 @@ def main():
 
             #### Considerações
 
-            1. 14 colunas (13 features + 1 target). 19.285 pedidos.
-            2. 5 features categóricas, 6 numéricas, 1 ID único, 1 datetime, e 1 target numérico.
+            1. 15 colunas (14 features + 1 target). 19.285 pedidos.
+            2. 5 features categóricas, 7 numéricas, 1 ID único, 1 datetime, e 1 target numérico.
             3. Valores ausentes removidos com filtros de negócio.
 
             ### EDA: Entendimento dos Dados
@@ -43,13 +44,13 @@ def main():
 
             1. **Desafio**: `status_final_do_pedido` passa a ficar constante após filtragem.<br>**Solução**: desconsiderar.
             2. **Desafio**: `id_da_loja`, `id_curto_do_pedido` e `id_completo_do_pedido` não são úteis para a predição.<br>**Solução**: desconsiderar.
-            3. **Desafio**: gerar variáveis temporais a partir de `data_e_hora_do_pedido`.<br>**Solução**: utilizar `feature-engine`.
+            3. **Desafio**: gerar variáveis temporais a partir de `data_e_hora_do_pedido`.<br>**Solução**: utilizar `pandas datetime`.
 
             #### Considerações
 
             ##### Qualidade 
 
-            Usar ordinal encoding para `turno`, `prioridade_do_pedido`, frequency encoding para `marca_da_loja`, `nome_da_loja` e one-hot encoding para `servico_logistico`.
+            Usar encoding para `turno`, `prioridade_do_pedido`, `marca_da_loja`, `nome_da_loja` e `servico_logistico`.
 
             ##### Entendimento
 
@@ -90,7 +91,7 @@ def main():
     with tab1:
         with open(settings.RESOURCES_PATH.joinpath("reports", "deliveries_data_profile_report.html"), "r", encoding="utf-8") as html_file:
             html_content = html_file.read()
-        st.components.v1.html(html_content, height=600, scrolling=True)
+        st.components.v1.html(html_content, height=860, scrolling=True)
     
     with tab2:
         df_pps = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("pps_predictors.parquet"), engine="pyarrow")
