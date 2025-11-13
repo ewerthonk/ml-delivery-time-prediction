@@ -59,6 +59,27 @@ The model aims to replace the current approach (historical average) with a more 
 
 ## 🚀 Usage
 
+### Setup
+
+1. **Environment Configuration**
+
+Create a `.env` file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set your Google Cloud Project ID:
+
+```bash
+PROJECT_ID=your-gcp-project-id
+SERVICE_NAME=delivery-time-prediction
+REGION=southamerica-east1
+SHORT_SHA=latest
+```
+
+> **Note**: The `.env` file is required for deployment and is not committed to version control.
+
 ### Local Development
 
 Run the Streamlit application locally:
@@ -85,9 +106,15 @@ make deploy
 ```
 
 This will:
+- Load configuration from `.env`
 - Build the Docker image using Cloud Build
 - Push to Artifact Registry
-- Deploy to Cloud Run in `southamerica-east1` region
+- Deploy to Cloud Run in the specified region with:
+  - 1 GiB memory
+  - 1 CPU
+  - Max 3 instances
+  - 5 concurrent requests per instance
+  - Public access (no authentication required)
 
 ## 🔬 Evaluation Metrics
 
@@ -111,42 +138,47 @@ This will:
 
 ## 📦 Folder Structure
 
-    ├── app.py                 <- Streamlit main application entry point
-    ├── main.py                <- Python entry point
-    ├── cloudbuild.yaml        <- Google Cloud Build configuration
-    ├── Dockerfile             <- Docker container configuration
-    ├── Makefile               <- Commands for running and deploying
-    ├── pyproject.toml         <- Project dependencies and configuration
+    ├── .dockerignore               <- Files to exclude from Docker builds
+    ├── .env.example                <- Environment variables template
+    ├── .gitignore                  <- Files to exclude from git
+    ├── app.py                      <- Streamlit main application entry point
+    ├── main.py                     <- Python entry point
+    ├── cloudbuild.yaml             <- Google Cloud Build configuration
+    ├── Dockerfile                  <- Docker container configuration
+    ├── Makefile                    <- Commands for running and deploying
+    ├── pyproject.toml              <- Project dependencies and configuration
+    ├── uv.lock                     <- Locked dependency versions
     │
     ├── data
-    │   ├── raw                <- The original, immutable data dump
+    │   ├── raw                     <- The original, immutable data dump
     │   │   └── raw_data_dict.json  <- Data dictionary with field descriptions
-    │   └── processed          <- The final, canonical data sets for modeling
+    │   └── processed               <- The final, canonical data sets for modeling
     │
-    ├── models                 <- Trained models and model artifacts
+    ├── models                      <- Trained models and model artifacts
     │
-    ├── notebooks              <- Jupyter notebooks for analysis and development
+    ├── notebooks                   <- Jupyter notebooks for analysis and development
     │   ├── 1.0-eda.ipynb
     │   └── 2.0-machine_learning.ipynb
     │
-    ├── resources              <- Reports, figures, and visualizations
+    ├── resources                   <- Reports, figures, and visualizations
+    │   ├── papers                  <- Academic papers and documentation
     │   ├── reports
     │   │   └── deliveries_data_profile_report.html
     │   └── visualizations
     │
-    ├── src                    <- Source code for the project
+    ├── src                         <- Source code for the project
     │   ├── __init__.py
-    │   ├── configs            <- Configuration files
+    │   ├── configs                 <- Configuration files
     │   │   └── settings.py
-    │   └── streamlit          <- Streamlit application pages
+    │   └── streamlit               <- Streamlit application pages
     │       ├── business_understanding.py
     │       ├── data_understanding.py
     │       ├── data_preparation.py
     │       ├── modelling_and_evaluation.py
     │       ├── deployment.py
-    │       └── playground.py  <- Interactive prediction interface
+    │       └── playground.py       <- Interactive prediction interface
     │
-    └── README.md              <- This file
+    └── README.md                   <- This file
 
 ## 📄 License
 
