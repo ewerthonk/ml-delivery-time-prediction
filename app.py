@@ -10,6 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
 def main():
     pages = st.navigation(
         pages=[
@@ -19,7 +20,9 @@ def main():
                 icon="🎯",
             ),
             st.Page(
-                page=PROJECT_PATH.joinpath("src", "streamlit", "business_understanding.py"),
+                page=PROJECT_PATH.joinpath(
+                    "src", "streamlit", "business_understanding.py"
+                ),
                 title="1. Business Understanding",
                 icon="📚",
             ),
@@ -34,7 +37,9 @@ def main():
                 icon="🧹",
             ),
             st.Page(
-                page=PROJECT_PATH.joinpath("src", "streamlit", "modelling_and_evaluation.py"),
+                page=PROJECT_PATH.joinpath(
+                    "src", "streamlit", "modelling_and_evaluation.py"
+                ),
                 title="4. Modelling and Evaluation",
                 icon="🤖",
             ),

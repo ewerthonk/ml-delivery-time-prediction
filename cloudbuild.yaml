@@ -19,15 +19,17 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'delivery-time-prediction'
+      - '${_SERVICE_NAME}'
       - '--image'
       - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'
       - '--region'
-      - 'southamerica-east1'
+      - '${_REGION}'
       - '--platform'
       - 'managed'
       - '--port'
       - '8501'
+      - '--set-env-vars'
+      - 'PROJECT_ID=$PROJECT_ID,SERVICE_NAME=${_SERVICE_NAME},REGION=${_REGION},SHORT_SHA=$SHORT_SHA'
 
 images:
   - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/masters/delivery-time-prediction:$SHORT_SHA'

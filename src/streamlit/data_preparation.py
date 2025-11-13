@@ -1,16 +1,14 @@
 # Standard Imports
 import streamlit as st
-import pandas as pd
 from textwrap import dedent
-from pathlib import Path
 
 # Local Imports
-from src.configs import settings
+
 
 def main():
     st.markdown(
         body=dedent(
-            f"""
+            """
             ## Feature Engineering
 
             ### Contexto
@@ -55,7 +53,7 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    
+
 
 if __name__ == "__main__":
     main()

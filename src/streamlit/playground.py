@@ -2,7 +2,6 @@
 import streamlit as st
 from textwrap import dedent
 import pandas as pd
-import numpy as np
 import joblib
 from sklearn.model_selection import cross_validate, KFold
 from sklearn.metrics import mean_absolute_error
@@ -12,20 +11,29 @@ from xgboost import XGBRegressor
 # Local Imports
 from src.configs import settings
 
+
 def load_data():
     """Load test data and model"""
-    X_test = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("X_test.parquet")).assign(
+    X_test = pd.read_parquet(
+        settings.DATA_PROCESSED_PATH.joinpath("X_test.parquet")
+    ).assign(
         marca_da_loja=lambda _df: _df["marca_da_loja"].astype("category"),
         nome_da_loja=lambda _df: _df["nome_da_loja"].astype("category"),
-    ) 
-    X_train = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("X_train.parquet")).assign(
+    )
+    X_train = pd.read_parquet(
+        settings.DATA_PROCESSED_PATH.joinpath("X_train.parquet")
+    ).assign(
         marca_da_loja=lambda _df: _df["marca_da_loja"].astype("category"),
         nome_da_loja=lambda _df: _df["nome_da_loja"].astype("category"),
-    ) 
+    )
     y_train = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("y_train.parquet"))
     y_test = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("y_test.parquet"))
-    preprocessing_pipeline = joblib.load(settings.PROJECT_PATH.joinpath("models", "preprocessing_pipeline.pkl"))
-    xgb_model = joblib.load(settings.PROJECT_PATH.joinpath("models", "xgb_optimized_model.pkl"))
+    preprocessing_pipeline = joblib.load(
+        settings.PROJECT_PATH.joinpath("models", "preprocessing_pipeline.pkl")
+    )
+    xgb_model = joblib.load(
+        settings.PROJECT_PATH.joinpath("models", "xgb_optimized_model.pkl")
+    )
     return X_test, X_train, y_train, y_test, preprocessing_pipeline, xgb_model
 
 
@@ -36,7 +44,7 @@ def get_default_sample(X_test):
 
 def update_datetime_features(df):
     """Update datetime-derived features from data_e_hora_do_pedido column
-    
+
     Matches the transformation from 1.0-eda notebook:
     - dia_da_semana: dayofweek (0=Monday, 6=Sunday)
     - dia_do_mes: day of month
@@ -44,16 +52,18 @@ def update_datetime_features(df):
     - minuto: minute
     - minutos_desde_meia_noite: hour * 60 + minute
     """
-    df = (
-        df.
-        copy()
-        .assign(
-            dia_da_semana=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.dayofweek,
-            dia_do_mes=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.day,
-            hora=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.hour,
-            minuto=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.minute,
-            minutos_desde_meia_noite=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.hour * 60 + pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.minute
-        )
+    df = df.copy().assign(
+        dia_da_semana=lambda _df: pd.to_datetime(
+            _df["data_e_hora_do_pedido"]
+        ).dt.dayofweek,
+        dia_do_mes=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.day,
+        hora=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.hour,
+        minuto=lambda _df: pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.minute,
+        minutos_desde_meia_noite=lambda _df: pd.to_datetime(
+            _df["data_e_hora_do_pedido"]
+        ).dt.hour
+        * 60
+        + pd.to_datetime(_df["data_e_hora_do_pedido"]).dt.minute,
     )
     return df
 
@@ -66,63 +76,65 @@ def main():
     with col1:
         st.metric(
             label="MAE Treino (CV)",
-            value=f"7,4 min",
-            delta=f"± 0,1",
+            value="7,4 min",
+            delta="± 0,1",
             delta_color="off",
         )
     with col2:
         st.metric(
             label="MAE Validação (CV)",
-            value=f"9,4 min",
-            delta=f"± 0,1",
+            value="9,4 min",
+            delta="± 0,1",
             delta_color="off",
         )
     with col3:
         st.metric(
             label="MAE Teste",
-            value=f"9,5 min",
+            value="9,5 min",
             delta=None,
         )
 
     # Expandable section for data dictionary
     with st.expander("📊 Dicionário de Dados e Contexto", expanded=False):
         # Create features info dataframe
-        features_info = pd.DataFrame({
-            "Feature": [
-                "Marca da loja",
-                "Nome da loja",
-                "Data e hora do pedido",
-                "Turno",
-                "Serviço logístico",
-                "Prioridade do pedido",
-                "Distância percorrida (km)",
-                "Taxa de entrega (R$)",
-                "Valor total dos itens (R$)",
-                "Dia da semana",
-                "Dia do mês",
-                "Hora do pedido",
-                "Minuto do pedido",
-                "Minutos desde meia-noite",
-                "Pedidos na última hora"
-            ],
-            "Faixa/Valores": [
-                "0-1 (anonimizada)",
-                "0-11 (anonimizada)",
-                "Datetime",
-                "MANHA, ALMOCO, TARDE, JANTAR, CEIA, MADRUGADA",
-                "ENTREGA_MAIS_FLEX, FULL_SERVICE, SOB_DEMANDA_ON, SOB_DEMANDA_OFF",
-                "PADRAO, RAPIDA",
-                "0.00 - 32.47 km",
-                "R$ 4.99 - 29.99",
-                "R$ 0 - 975.30",
-                "0-6",
-                "1-31",
-                "8-22",
-                "0-59",
-                "520-1378",
-                "0-60 pedidos"
-            ]
-        })
+        features_info = pd.DataFrame(
+            {
+                "Feature": [
+                    "Marca da loja",
+                    "Nome da loja",
+                    "Data e hora do pedido",
+                    "Turno",
+                    "Serviço logístico",
+                    "Prioridade do pedido",
+                    "Distância percorrida (km)",
+                    "Taxa de entrega (R$)",
+                    "Valor total dos itens (R$)",
+                    "Dia da semana",
+                    "Dia do mês",
+                    "Hora do pedido",
+                    "Minuto do pedido",
+                    "Minutos desde meia-noite",
+                    "Pedidos na última hora",
+                ],
+                "Faixa/Valores": [
+                    "0-1 (anonimizada)",
+                    "0-11 (anonimizada)",
+                    "Datetime",
+                    "MANHA, ALMOCO, TARDE, JANTAR, CEIA, MADRUGADA",
+                    "ENTREGA_MAIS_FLEX, FULL_SERVICE, SOB_DEMANDA_ON, SOB_DEMANDA_OFF",
+                    "PADRAO, RAPIDA",
+                    "0.00 - 32.47 km",
+                    "R$ 4.99 - 29.99",
+                    "R$ 0 - 975.30",
+                    "0-6",
+                    "1-31",
+                    "8-22",
+                    "0-59",
+                    "520-1378",
+                    "0-60 pedidos",
+                ],
+            }
+        )
 
         st.markdown(
             body=dedent(
@@ -135,7 +147,7 @@ def main():
             unsafe_allow_html=True,
         )
         st.dataframe(features_info, hide_index=True, width="stretch", height=563)
-    
+
     st.markdown(
         body=dedent(
             """
@@ -149,11 +161,11 @@ def main():
 
     # Load data and model
     X_test, X_train, y_train, y_test, preprocessing_pipeline, xgb_model = load_data()
-    
+
     # Initialize session state for the sample
     if "sample_df" not in st.session_state:
         st.session_state.sample_df = get_default_sample(X_test)
-    
+
     # Reorder columns: editable first, disabled at the end
     column_order = [
         "marca_da_loja",
@@ -172,7 +184,7 @@ def main():
         "minuto",
         "minutos_desde_meia_noite",
     ]
-    
+
     # Configure column settings for data_editor
     column_config = {
         "marca_da_loja": st.column_config.SelectboxColumn(
@@ -183,7 +195,7 @@ def main():
         "nome_da_loja": st.column_config.SelectboxColumn(
             "Restaurante",
             help="ID anonimizado do restaurante (0-11)",
-            options=list(range(0,12)),
+            options=list(range(0, 12)),
         ),
         "data_e_hora_do_pedido": st.column_config.DatetimeColumn(
             "DataHora do Pedido",
@@ -197,7 +209,12 @@ def main():
         "servico_logistico": st.column_config.SelectboxColumn(
             "Serviço Logístico",
             help="Tipo de serviço logístico",
-            options=["ENTREGA_MAIS_FLEX", "FULL_SERVICE", "SOB_DEMANDA_ON", "SOB_DEMANDA_OFF"],
+            options=[
+                "ENTREGA_MAIS_FLEX",
+                "FULL_SERVICE",
+                "SOB_DEMANDA_ON",
+                "SOB_DEMANDA_OFF",
+            ],
         ),
         "prioridade_do_pedido": st.column_config.SelectboxColumn(
             "Prioridade",
@@ -261,7 +278,7 @@ def main():
             step=1,
         ),
     }
-    
+
     # Display editable dataframe
     df_edited = st.data_editor(
         st.session_state.sample_df,
@@ -271,36 +288,42 @@ def main():
         num_rows="fixed",
         column_order=column_order,
     )
-    
+
     # Update datetime-derived features if datetime changed
-    if not df_edited["data_e_hora_do_pedido"].equals(st.session_state.sample_df["data_e_hora_do_pedido"]):
+    if not df_edited["data_e_hora_do_pedido"].equals(
+        st.session_state.sample_df["data_e_hora_do_pedido"]
+    ):
         df_edited = update_datetime_features(df_edited)
-    
+
     # Update session state with edited values
     st.session_state.sample_df = df_edited
-    
+
     # Buttons in columns
     col1, col2 = st.columns(2)
-    
+
     with col1:
         if st.button("Resetar Amostra", use_container_width=True):
             st.session_state.sample_df = get_default_sample(X_test)
-    
+
     with col2:
-        predict_button = st.button("Prever Tempo de Entrega", use_container_width=True, type="primary")
-    
+        predict_button = st.button(
+            "Prever Tempo de Entrega", use_container_width=True, type="primary"
+        )
+
     # Prediction section
     if predict_button:
         with st.spinner("Realizando predição..."):
             prediction = xgb_model.predict(df_edited)[0]
             st.session_state.last_prediction = prediction
-    
+
     # Display prediction persistently
     if "last_prediction" in st.session_state:
-        st.markdown(f"#### Tempo de Entrega Previsto: **{st.session_state.last_prediction:.2f} minutos**")
-    
+        st.markdown(
+            f"#### Tempo de Entrega Previsto: **{st.session_state.last_prediction:.2f} minutos**"
+        )
+
     st.markdown("---")
-    
+
     # Advanced section: Custom model training
     st.markdown(
         body=dedent(
@@ -312,10 +335,10 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    
+
     with st.expander("Configurar Hiperparâmetros do XGBoost", expanded=True):
         col1, col2, col3 = st.columns(3)
-        
+
         with col1:
             n_estimators = st.slider(
                 "n_estimators",
@@ -323,27 +346,27 @@ def main():
                 max_value=2000,
                 value=785,
                 step=100,
-                help="Número de árvores no ensemble"
+                help="Número de árvores no ensemble",
             )
-            
+
             learning_rate = st.slider(
                 "learning_rate",
                 min_value=0.001,
                 max_value=0.1,
                 value=0.012,
                 step=0.001,
-                help="Taxa de aprendizado"
+                help="Taxa de aprendizado",
             )
-            
+
             max_depth = st.slider(
                 "max_depth",
                 min_value=1,
                 max_value=10,
                 value=8,
                 step=1,
-                help="Profundidade máxima de cada árvore"
+                help="Profundidade máxima de cada árvore",
             )
-        
+
         with col2:
             subsample = st.slider(
                 "subsample",
@@ -351,16 +374,16 @@ def main():
                 max_value=1.0,
                 value=0.82,
                 step=0.01,
-                help="Fração de amostras usadas por árvore"
+                help="Fração de amostras usadas por árvore",
             )
-            
+
             colsample_bytree = st.slider(
                 "colsample_bytree",
                 min_value=0.05,
                 max_value=1.0,
                 value=0.76,
                 step=0.01,
-                help="Fração de features usadas por árvore"
+                help="Fração de features usadas por árvore",
             )
 
             alpha = st.slider(
@@ -369,9 +392,9 @@ def main():
                 max_value=10.0,
                 value=2.38,
                 step=0.01,
-                help="Termo de regularização L1 nos pesos"
+                help="Termo de regularização L1 nos pesos",
             )
-        
+
         with col3:
             min_child_weight = st.slider(
                 "min_child_weight",
@@ -379,27 +402,27 @@ def main():
                 max_value=20,
                 value=18,
                 step=1,
-                help="Peso mínimo necessário em um nó filho"
+                help="Peso mínimo necessário em um nó filho",
             )
-            
+
             gamma = st.slider(
                 "gamma",
                 min_value=0.0,
                 max_value=5.0,
                 value=4.42,
                 step=0.01,
-                help="Redução mínima de perda para criar nova partição"
+                help="Redução mínima de perda para criar nova partição",
             )
-            
+
             reg_lambda = st.slider(
                 "lambda",
                 min_value=1.0,
                 max_value=10.0,
                 value=9.82,
                 step=0.01,
-                help="Termo de regularização L2 nos pesos"
+                help="Termo de regularização L2 nos pesos",
             )
-        
+
         if st.button("Treinar Modelo Personalizado", use_container_width=True):
             st.session_state._just_trained = True
             with st.spinner("Treinando modelo e gerando validação cruzada..."):
@@ -418,12 +441,12 @@ def main():
                     random_state=42,
                     verbosity=0,
                 )
-                
+
                 # Create pipeline with preprocessing + custom model
                 custom_pipeline = Pipeline(
                     preprocessing_pipeline.steps + [("xgboost_custom", custom_xgb)]
                 )
-                
+
                 # Cross-validation on training data
                 kfold = KFold(n_splits=3, shuffle=False)
 
@@ -435,27 +458,27 @@ def main():
                     cv=kfold,
                     return_train_score=True,
                 )
-                
+
                 # Calculate MAE
                 mae_train = -cv_results["train_score"]
                 mae_val = -cv_results["test_score"]
-                
+
                 # Train final model on all training data
                 custom_pipeline.fit(X_train, y_train)
-                
+
                 # Calculate MAE on test set
                 y_pred_test = custom_pipeline.predict(X_test)
                 mae_test = mean_absolute_error(y_test, y_pred_test)
-                
+
                 # Store custom model in session state
                 st.session_state.custom_model = custom_pipeline
                 st.session_state.mae_train = mae_train
                 st.session_state.mae_val = mae_val
                 st.session_state.mae_test = mae_test
-                
+
                 # Display results
                 st.success("✅ Modelo treinado com sucesso!")
-                
+
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric(
@@ -477,10 +500,10 @@ def main():
                         value=f"{mae_test:.2f} min",
                         delta_color="off",
                     )
-    
+
     # Display metrics if custom model exists (persist across reruns) - OUTSIDE expander
     if "custom_model" in st.session_state and "mae_train" in st.session_state:
-        if not st.session_state.get('_just_trained', False):
+        if not st.session_state.get("_just_trained", False):
             st.success("✅ Modelo personalizado disponível!")
             col1, col2, col3 = st.columns(3)
             with col1:
@@ -506,17 +529,19 @@ def main():
         else:
             # Reset the flag after showing metrics once
             st.session_state._just_trained = False
-    
+
     # If custom model exists in session state, allow predictions
     if "custom_model" in st.session_state:
         st.markdown("---")
         if st.button("Prever com Modelo Personalizado", use_container_width=True):
             custom_prediction = st.session_state.custom_model.predict(df_edited)[0]
             st.session_state.last_custom_prediction = custom_prediction
-        
+
         # Display custom prediction persistently
         if "last_custom_prediction" in st.session_state:
-            st.markdown(f"#### Tempo de Entrega Previsto (Modelo Personalizado): **{st.session_state.last_custom_prediction:.2f} minutos**")
+            st.markdown(
+                f"#### Tempo de Entrega Previsto (Modelo Personalizado): **{st.session_state.last_custom_prediction:.2f} minutos**"
+            )
 
 
 if __name__ == "__main__":

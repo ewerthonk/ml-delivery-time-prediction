@@ -2,15 +2,15 @@
 import streamlit as st
 import pandas as pd
 from textwrap import dedent
-from pathlib import Path
 
 # Local Imports
 from src.configs import settings
 
+
 def main():
     st.markdown(
         body=dedent(
-            f"""
+            """
             ## Exploratory Data Analysis (EDA)
             
             ### EDA: Qualidade dos Dados
@@ -87,41 +87,48 @@ def main():
 
     # Create tabs for different visualizations
     tab1, tab2, tab3 = st.tabs(["Relatório", "Poder Preditivo", "Árvore de Decisão"])
-    
+
     with tab1:
-        with open(settings.RESOURCES_PATH.joinpath("reports", "deliveries_data_profile_report.html"), "r", encoding="utf-8") as html_file:
+        with open(
+            settings.RESOURCES_PATH.joinpath(
+                "reports", "deliveries_data_profile_report.html"
+            ),
+            "r",
+            encoding="utf-8",
+        ) as html_file:
             html_content = html_file.read()
         st.components.v1.html(html_content, height=860, scrolling=True)
-    
+
     with tab2:
-        df_pps = pd.read_parquet(settings.DATA_PROCESSED_PATH.joinpath("pps_predictors.parquet"), engine="pyarrow")
-        
+        df_pps = pd.read_parquet(
+            settings.DATA_PROCESSED_PATH.joinpath("pps_predictors.parquet"),
+            engine="pyarrow",
+        )
+
         st.dataframe(
             data=df_pps,
             width="stretch",
             hide_index=True,
             column_config={
                 "x": st.column_config.TextColumn("Feature"),
-                "ppscore": st.column_config.NumberColumn(
-                    "PPS Score",
-                    format="%.3f"
-                ),
+                "ppscore": st.column_config.NumberColumn("PPS Score", format="%.3f"),
                 "baseline_score": st.column_config.NumberColumn(
-                    "Baseline Score",
-                    format="%.3f"
+                    "Baseline Score", format="%.3f"
                 ),
                 "model_score": st.column_config.NumberColumn(
-                    "Model Score",
-                    format="%.3f"
-                )
-            }
+                    "Model Score", format="%.3f"
+                ),
+            },
         )
-    
+
     with tab3:
-        svg_path = settings.RESOURCES_PATH.joinpath("visualizations", "tree_regressor.svg")
+        svg_path = settings.RESOURCES_PATH.joinpath(
+            "visualizations", "tree_regressor.svg"
+        )
         with open(svg_path, "r", encoding="utf-8") as svg_file:
             svg_content = svg_file.read()
         st.image(svg_content, width="stretch")
+
 
 if __name__ == "__main__":
     main()

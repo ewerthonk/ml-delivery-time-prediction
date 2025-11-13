@@ -1,8 +1,6 @@
-# Variables
-PROJECT_ID := ewerthonk-data
-SERVICE_NAME := delivery-time-prediction
-REGION := southamerica-east1
-SHORT_SHA := latest
+# Load environment variables from .env file
+include .env
+export
 
 .PHONY: run-local
 run-local:
@@ -15,6 +13,6 @@ deploy:
 	gcloud builds submit \
 		--project=$(PROJECT_ID) \
 		--config cloudbuild.yaml \
-		--substitutions=SHORT_SHA=$(SHORT_SHA) \
+		--substitutions=SHORT_SHA=$(SHORT_SHA),_SERVICE_NAME=$(SERVICE_NAME),_REGION=$(REGION) \
 		.
 	@echo "Deployment completed!"

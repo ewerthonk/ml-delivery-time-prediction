@@ -6,10 +6,11 @@ from textwrap import dedent
 # Local Imports
 from src.configs import settings
 
+
 def main():
     st.markdown(
         body=dedent(
-            f"""
+            """
             ## Modelling
 
             ### Contexto
@@ -56,15 +57,17 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    
+
     st.dataframe(
-        data=pd.read_parquet(path=settings.DATA_PROCESSED_PATH.joinpath("results.parquet")),
+        data=pd.read_parquet(
+            path=settings.DATA_PROCESSED_PATH.joinpath("results.parquet")
+        ),
         hide_index=True,
     )
 
     st.markdown(
         body=dedent(
-            f"""
+            """
             ### Baseline
 
             O Dummy Regressor (que prediz o valor da média dos dados de treino - aproximadamente 37 minutos) apresentou MAE de aproximadamente 12,9 minutos em treino, validação e teste.
@@ -77,7 +80,7 @@ def main():
     st.image(image=settings.RESOURCES_PATH.joinpath("visualizations", "rp_dummy.png"))
     st.markdown(
         body=dedent(
-            f"""
+            """
             Das visualizações, observa-se o R2 de treino e teste igual a 0, indicando que o modelo não explica a variabilidade dos dados. Não há observações relevantes para o gráfico de curva de aprendizado, já que a média é utilizada.
             
             ---
@@ -85,11 +88,10 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    
 
     st.markdown(
         body=dedent(
-            f"""
+            """
             ### XGBoost Inicial
 
             O modelo XGBoost inicial (com n_estimators = 100) apresentou MAE de aproximadamente 5,7 minutos em treino, aumentando para 9,8 minutos no teste. 
@@ -97,11 +99,15 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    st.image(image=settings.RESOURCES_PATH.joinpath("visualizations", "lc_xgb_initial.png"))
-    st.image(image=settings.RESOURCES_PATH.joinpath("visualizations", "rp_xgb_initial.png"))
+    st.image(
+        image=settings.RESOURCES_PATH.joinpath("visualizations", "lc_xgb_initial.png")
+    )
+    st.image(
+        image=settings.RESOURCES_PATH.joinpath("visualizations", "rp_xgb_initial.png")
+    )
     st.markdown(
         body=dedent(
-            f"""
+            """
             Das visualizações, observa-se um comportamento típico de **overfit**, caracterizado pela diferença entre as curvas de aprendizado e os parâmetros. Além disso, nota-se que um aumento do número de observações ainda pode ser benéfico para o modelo.
 
             ---
@@ -112,13 +118,13 @@ def main():
 
     st.markdown(
         body=dedent(
-            f"""
+            """
             ### XGBoost otimizado
 
             Parâmetros definidos pela otimização:
 
             ```json
-            {{
+            {
                 "n_estimators": 785,
                 "learning_rate": 0.012,
                 "max_depth": 8,
@@ -128,7 +134,7 @@ def main():
                 "gamma": 4.42,
                 "alpha": 2.38,
                 "lambda": 9.82,
-            }}
+            }
             ```
 
             O modelo XGBoost otimizado apresentou MAE de aproximadamente 7,4 minutos em treino, aumentando para 9,5 minutos no teste.
@@ -136,11 +142,15 @@ def main():
         ),
         unsafe_allow_html=True,
     )
-    st.image(image=settings.RESOURCES_PATH.joinpath("visualizations", "lc_xgb_optimized.png"))
-    st.image(image=settings.RESOURCES_PATH.joinpath("visualizations", "rp_xgb_optimized.png"))
+    st.image(
+        image=settings.RESOURCES_PATH.joinpath("visualizations", "lc_xgb_optimized.png")
+    )
+    st.image(
+        image=settings.RESOURCES_PATH.joinpath("visualizations", "rp_xgb_optimized.png")
+    )
     st.markdown(
         body=dedent(
-            f"""
+            """
             Das visualizações, observa-se uma redução do **overfit**, caracterizado pela aproximação das curvas de aprendizado e dos parâmetros e melhor desempenho geral.
             """
         ),
@@ -149,7 +159,7 @@ def main():
 
     st.markdown(
         body=dedent(
-            f"""
+            """
             ## Considerações Finais
 
             1. O ganho de desempenho da abordagem de machine learning em relação ao baseline foi a redução do erro médio (MAE) de 12,8 minutos para 9,5 minutos (redução de 25,8%). Considerando o tempo médio de entrega de aproximadamente 37 minutos, a viabilidade da implementação depende da estratégia do negócio.

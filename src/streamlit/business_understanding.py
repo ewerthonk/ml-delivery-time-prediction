@@ -2,10 +2,11 @@
 import streamlit as st
 from textwrap import dedent
 
+
 def main():
     st.markdown(
         body=dedent(
-            f"""
+            """
             ## Entendimento do Negócio
             
             ### Contexto
@@ -35,13 +36,13 @@ def main():
             ### Exemplo do json: `raw_data_dict.json`
 
             ```json
-            {{
+            {
                 "nome_do_campo_antes_limpeza": "MARCA DA LOJA",
                 "nome_do_campo_apos_limpeza": "marca_da_loja",
                 "tipo": "category",
                 "descrição": "Identificador codificado da marca da loja (anonimizado por privacidade)",
                 "disponivel_na_hora_do_pedido": true
-            }}
+            }
             ```
             """
         ),
